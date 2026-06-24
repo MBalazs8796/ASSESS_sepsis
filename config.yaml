@@ -1,0 +1,5 @@
+mimic_path: "/persistent/physionet.org/files/mimiciv/2.2"
+output_path: "/persistent/septic"
+final_dataset_path: "../dataset/complete_version_labeled.csv"
+importance_path: "/persistent/importances/"
+meta_data_path: "../meta_data/icd_codes.json"
