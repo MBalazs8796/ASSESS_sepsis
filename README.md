@@ -2,6 +2,8 @@
 
 This repository contains all code used to create the dataset and causal AI results acquired during the ASSESS sepsis project. The created datasets themselves are also provided to ease reproduction.
 
+A visual overview of our results and methods is available at our [website](https://mbalazs8796.github.io/ASSESS_sepsis/).
+
 If after reading the contents of this README file you still encounter issues when running the codes found in this repository please contact on of the following: [balazs.mosolygo@uib.no](mailto:balazs.mosolygo@uib.no) or [mbalazs215@gmail.com](mailto:mbalazs215@gmail.com).
 
 # Installation
