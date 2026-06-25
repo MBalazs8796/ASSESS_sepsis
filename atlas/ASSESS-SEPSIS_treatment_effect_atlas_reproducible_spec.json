@@ -1,0 +1,579 @@
+# ASSESS-SEPSIS Interactive Treatment-Effect Atlas Reproducible Specification
+
+This folder contains a machine-readable JSON specification for recreating the ASSESS-SEPSIS Interactive Treatment-Effect Atlas.
+
+Files:
+- `ASSESS-SEPSIS_treatment_effect_atlas_reproducible_spec.json`: structured data, labels, interpretations, estimability matrix, HTE examples, and visual/UI specifications.
+- Source HTML used to derive the specification: `ASSESS-SEPSIS_treatment_effect_atlas_v5.html`.
+
+Suggested use:
+1. Load the JSON file.
+2. Render each tab listed in `ui_specification.tabs`.
+3. Use `strategies` for the Strategy Builder and Effect Atlas.
+4. Use `hte_examples` for the HTE and ΔHTE panels.
+5. Use `estimability_matrix` for the Estimability Atlas.
+6. Use `methods_drawer` for the Methods & Validation section.
+7. Apply `visual_style` or journal-specific styling.
+
+Interpretation:
+The atlas is intended as an interactive scientific supplement for visualization of treatment-effect estimates. It is not a clinical decision-support tool and should not be used to make individual treatment recommendations.
+
+Generated: 2026-06-14T04:46:03Z
+
+
+{
+  "schema_version": "1.0.0",
+  "asset_name": "ASSESS-SEPSIS Interactive Treatment-Effect Atlas",
+  "source_html": "ASSESS-SEPSIS_treatment_effect_atlas_v5.html",
+  "generated_from": "/mnt/data/ASSESS-SEPSIS_treatment_effect_atlas_v5.html",
+  "generated_at_utc": "2026-06-14T04:46:03Z",
+  "purpose": "Reproducible specification for recreating the ASSESS-SEPSIS interactive treatment-effect atlas as a scientific supplement.",
+  "display_title": "ASSESS-SEPSIS Interactive Treatment-Effect Atlas",
+  "subtitle": "Beyond bundle compliance toward individualized treatment-effect estimation using causal machine learning.",
+  "interpretation_guardrail": "This atlas visualizes treatment-effect estimates and heterogeneity for scientific interpretation. It is not a bedside decision-support tool and does not generate patient-specific treatment recommendations.",
+  "central_thesis": {
+    "headline": "Early sepsis care is an interacting, state-dependent treatment system.",
+    "equation": "Bundle Strategy × Patient State → Treatment Effect",
+    "bundle_strategy": "which components are delivered",
+    "patient_state": "lactate, SOFA, CHF and clinical context",
+    "treatment_effect": "ATE • CATE • ΔHTE",
+    "key_scientific_takeaway": "Treatment effects in early sepsis emerge from the interaction between bundle strategy and physiologic state. Average treatment effects, heterogeneous treatment effects, and estimability should therefore be interpreted together rather than in isolation.",
+    "insights": [
+      "Individual interventions demonstrate modest average effects.",
+      "Coordinated bundle strategies demonstrate progressively larger effects.",
+      "Treatment benefit varies across physiologic states.",
+      "Not all treatment effects are causally estimable.",
+      "Sepsis bundles are interacting strategies, not additive checklists."
+    ]
+  },
+  "abbreviations": {
+    "ASSESS-SEPSIS": "ASsessment of Strategy Effects and Subgroup Signals in SEPSIS",
+    "ATE": "average treatment effect",
+    "CATE": "conditional average treatment effect",
+    "HTE": "heterogeneous treatment effect",
+    "ΔHTE": "between-stratum difference in heterogeneous treatment effect",
+    "SOFA": "Sequential Organ Failure Assessment",
+    "CHF": "congestive heart failure",
+    "ICU": "intensive care unit",
+    "GRF": "generalized random forest",
+    "CI": "confidence interval"
+  },
+  "components": [
+    {
+      "key": "lactate",
+      "label": "Lactate",
+      "description": "Lactate measurement within 6 hours of time zero."
+    },
+    {
+      "key": "cultures",
+      "label": "Cultures",
+      "description": "Blood cultures acquired before antibiotics."
+    },
+    {
+      "key": "abx",
+      "label": "Antibiotics",
+      "description": "Broad-spectrum antibiotics within 6 hours of time zero."
+    },
+    {
+      "key": "fluids",
+      "label": "Fluids ≥30",
+      "description": "Fluid resuscitation ≥30 mL/kg within 6 hours of time zero."
+    },
+    {
+      "key": "pressors",
+      "label": "Pressors",
+      "description": "Vasopressor initiation in the early treatment window."
+    }
+  ],
+  "outcomes": [
+    {
+      "key": "mortality",
+      "label": "In-hospital mortality",
+      "beneficial_direction": "negative",
+      "unit": "absolute risk difference"
+    },
+    {
+      "key": "hfd",
+      "label": "Hospital-free days",
+      "beneficial_direction": "positive",
+      "unit": "days"
+    },
+    {
+      "key": "icufd",
+      "label": "ICU-free days",
+      "beneficial_direction": "positive",
+      "unit": "days"
+    },
+    {
+      "key": "los",
+      "label": "Hospital length of stay",
+      "beneficial_direction": "negative",
+      "unit": "days"
+    }
+  ],
+  "strategies": [
+    {
+      "strategy_key": "00100",
+      "name": "Early antibiotics",
+      "components_on": [
+        "abx"
+      ],
+      "status": "Estimable",
+      "source": "Individual intervention",
+      "effects": {
+        "mortality": {
+          "estimate": -0.03,
+          "ci_lower": -0.06,
+          "ci_upper": 0.0
+        },
+        "hfd": {
+          "estimate": 1.13,
+          "ci_lower": 0.5,
+          "ci_upper": 1.75
+        },
+        "icufd": {
+          "estimate": 0.68,
+          "ci_lower": -0.1,
+          "ci_upper": 1.46
+        },
+        "los": {
+          "estimate": -1.73,
+          "ci_lower": -2.9,
+          "ci_upper": -0.55
+        }
+      }
+    },
+    {
+      "strategy_key": "10100",
+      "name": "Lactate + antibiotics",
+      "components_on": [
+        "lactate",
+        "abx"
+      ],
+      "status": "Estimable",
+      "source": "Bundle strategy",
+      "effects": {
+        "mortality": {
+          "estimate": -0.06,
+          "ci_lower": -0.1,
+          "ci_upper": -0.02
+        },
+        "hfd": {
+          "estimate": 2.13,
+          "ci_lower": 1.47,
+          "ci_upper": 2.8
+        },
+        "icufd": {
+          "estimate": 1.77,
+          "ci_lower": 0.87,
+          "ci_upper": 2.67
+        },
+        "los": {
+          "estimate": -2.2,
+          "ci_lower": -3.4,
+          "ci_upper": -1.0
+        }
+      }
+    },
+    {
+      "strategy_key": "00110",
+      "name": "Fluids ≥30 + antibiotics",
+      "components_on": [
+        "abx",
+        "fluids"
+      ],
+      "status": "Estimable",
+      "source": "Bundle strategy",
+      "effects": {
+        "mortality": {
+          "estimate": -0.04,
+          "ci_lower": -0.08,
+          "ci_upper": 0.0
+        },
+        "hfd": {
+          "estimate": 1.41,
+          "ci_lower": 0.58,
+          "ci_upper": 2.24
+        },
+        "icufd": {
+          "estimate": 1.1,
+          "ci_lower": 0.08,
+          "ci_upper": 2.12
+        },
+        "los": {
+          "estimate": -2.85,
+          "ci_lower": -4.42,
+          "ci_upper": -1.28
+        }
+      }
+    },
+    {
+      "strategy_key": "10110",
+      "name": "Fluids ≥30 + lactate + antibiotics",
+      "components_on": [
+        "lactate",
+        "abx",
+        "fluids"
+      ],
+      "status": "Estimable",
+      "source": "Bundle strategy",
+      "effects": {
+        "mortality": {
+          "estimate": -0.1,
+          "ci_lower": -0.14,
+          "ci_upper": -0.06
+        },
+        "hfd": {
+          "estimate": 2.61,
+          "ci_lower": 1.93,
+          "ci_upper": 3.29
+        },
+        "icufd": {
+          "estimate": 2.43,
+          "ci_lower": 1.51,
+          "ci_upper": 3.36
+        },
+        "los": {
+          "estimate": -3.25,
+          "ci_lower": -4.85,
+          "ci_upper": -1.65
+        }
+      }
+    },
+    {
+      "strategy_key": "11110",
+      "name": "Fluids ≥30 + lactate + antibiotics + cultures",
+      "components_on": [
+        "lactate",
+        "cultures",
+        "abx",
+        "fluids"
+      ],
+      "status": "Limited overlap",
+      "source": "Higher-order strategy",
+      "effects": {
+        "mortality": {
+          "estimate": -0.06,
+          "ci_lower": -0.12,
+          "ci_upper": 0.0
+        },
+        "hfd": {
+          "estimate": 1.9,
+          "ci_lower": 0.6,
+          "ci_upper": 3.2
+        },
+        "icufd": {
+          "estimate": 1.65,
+          "ci_lower": 0.2,
+          "ci_upper": 3.1
+        },
+        "los": {
+          "estimate": -2.1,
+          "ci_lower": -4.0,
+          "ci_upper": -0.2
+        }
+      }
+    },
+    {
+      "strategy_key": "10111",
+      "name": "Fluids ≥30 + lactate + antibiotics + pressors",
+      "components_on": [
+        "lactate",
+        "abx",
+        "fluids",
+        "pressors"
+      ],
+      "status": "Limited overlap",
+      "source": "Higher-order strategy",
+      "effects": {
+        "mortality": {
+          "estimate": -0.02,
+          "ci_lower": -0.1,
+          "ci_upper": 0.06
+        },
+        "hfd": {
+          "estimate": 1.2,
+          "ci_lower": -0.2,
+          "ci_upper": 2.6
+        },
+        "icufd": {
+          "estimate": 1.0,
+          "ci_lower": -0.5,
+          "ci_upper": 2.5
+        },
+        "los": {
+          "estimate": -1.4,
+          "ci_lower": -3.2,
+          "ci_upper": 0.4
+        }
+      }
+    }
+  ],
+  "hte_examples": [
+    {
+      "id": "cult_lact_mort",
+      "label": "Cultures bundle | Lactate | Mortality",
+      "strategy": "Fluids ≥30 + lactate + antibiotics + cultures",
+      "outcome": "In-hospital mortality",
+      "beneficial_direction": "negative",
+      "stratum_a": {
+        "label": "Lactate ≥4",
+        "estimate": 0.18,
+        "ci_lower": 0.05,
+        "ci_upper": 0.31
+      },
+      "stratum_b": {
+        "label": "Lactate <4",
+        "estimate": -0.17,
+        "ci_lower": -0.2,
+        "ci_upper": -0.14
+      },
+      "delta_hte": 0.35,
+      "heterogeneity_type": "Qualitative and quantitative heterogeneity"
+    },
+    {
+      "id": "cult_sofa_mort",
+      "label": "Cultures bundle | SOFA | Mortality",
+      "strategy": "Fluids ≥30 + lactate + antibiotics + cultures",
+      "outcome": "In-hospital mortality",
+      "beneficial_direction": "negative",
+      "stratum_a": {
+        "label": "SOFA ≥ median",
+        "estimate": 0.14,
+        "ci_lower": 0.11,
+        "ci_upper": 0.17
+      },
+      "stratum_b": {
+        "label": "SOFA < median",
+        "estimate": -0.21,
+        "ci_lower": -0.24,
+        "ci_upper": -0.18
+      },
+      "delta_hte": 0.35,
+      "heterogeneity_type": "Qualitative and quantitative heterogeneity"
+    },
+    {
+      "id": "cult_sofa_icufd",
+      "label": "Cultures bundle | SOFA | ICU-free days",
+      "strategy": "Fluids ≥30 + lactate + antibiotics + cultures",
+      "outcome": "ICU-free days",
+      "beneficial_direction": "positive",
+      "stratum_a": {
+        "label": "SOFA ≥ median",
+        "estimate": -10.54,
+        "ci_lower": -11.25,
+        "ci_upper": -9.83
+      },
+      "stratum_b": {
+        "label": "SOFA < median",
+        "estimate": 8.24,
+        "ci_lower": 7.46,
+        "ci_upper": 9.02
+      },
+      "delta_hte": 18.78,
+      "heterogeneity_type": "Large directional heterogeneity"
+    },
+    {
+      "id": "vp_lact_hfd",
+      "label": "Vasopressor bundle | Lactate | Hospital-free days",
+      "strategy": "Fluids ≥30 + lactate + antibiotics + pressors",
+      "outcome": "Hospital-free days",
+      "beneficial_direction": "positive",
+      "stratum_a": {
+        "label": "Lactate ≥4",
+        "estimate": -5.78,
+        "ci_lower": -6.33,
+        "ci_upper": -5.23
+      },
+      "stratum_b": {
+        "label": "Lactate <4",
+        "estimate": 12.37,
+        "ci_lower": 11.8,
+        "ci_upper": 12.94
+      },
+      "delta_hte": 18.15,
+      "heterogeneity_type": "Large directional heterogeneity"
+    }
+  ],
+  "estimability_matrix": {
+    "columns": [
+      "Overall ATE",
+      "Lactate CATE",
+      "SOFA CATE",
+      "CHF CATE"
+    ],
+    "rows": [
+      {
+        "strategy": "Early antibiotics",
+        "key": "00100",
+        "status": [
+          "Estimable",
+          "Not estimable",
+          "Not estimable",
+          "Not estimable"
+        ]
+      },
+      {
+        "strategy": "Lactate + antibiotics",
+        "key": "10100",
+        "status": [
+          "Estimable",
+          "Not estimable",
+          "Not estimable",
+          "Not estimable"
+        ]
+      },
+      {
+        "strategy": "Fluids + antibiotics",
+        "key": "00110",
+        "status": [
+          "Estimable",
+          "Not estimable",
+          "Not estimable",
+          "Not estimable"
+        ]
+      },
+      {
+        "strategy": "Fluids + lactate + antibiotics",
+        "key": "10110",
+        "status": [
+          "Estimable",
+          "Estimable",
+          "Estimable",
+          "Estimable"
+        ]
+      },
+      {
+        "strategy": "Cultures higher-order bundle",
+        "key": "11110",
+        "status": [
+          "Estimable",
+          "Limited overlap",
+          "Limited overlap",
+          "Limited overlap"
+        ]
+      },
+      {
+        "strategy": "Vasopressor higher-order bundle",
+        "key": "10111",
+        "status": [
+          "Estimable",
+          "Limited overlap",
+          "Limited overlap",
+          "Limited overlap"
+        ]
+      }
+    ],
+    "status_definitions": {
+      "Estimable": "This comparison has sufficient support for primary interpretation.",
+      "Limited overlap": "This comparison is interpretable with caution because overlap or subgroup support is constrained.",
+      "Not estimable": "This comparison is not supported by the current estimand set or overlap structure and should not be extrapolated."
+    }
+  },
+  "ui_specification": {
+    "tabs": [
+      {
+        "id": "thesis",
+        "label": "Scientific thesis"
+      },
+      {
+        "id": "builder",
+        "label": "Strategy builder"
+      },
+      {
+        "id": "effects",
+        "label": "Effect atlas"
+      },
+      {
+        "id": "hte",
+        "label": "HTE & ΔHTE"
+      },
+      {
+        "id": "estimability",
+        "label": "Estimability atlas"
+      },
+      {
+        "id": "methods",
+        "label": "Methods & validation"
+      }
+    ],
+    "default_component_state": {
+      "lactate": false,
+      "cultures": false,
+      "abx": true,
+      "fluids": false,
+      "pressors": false
+    },
+    "strategy_key_encoding": "Binary string ordered as lactate, cultures, antibiotics, fluids, pressors; 1 indicates component ON and 0 indicates component OFF.",
+    "forest_plot_requirements": [
+      "Display treatment strategy labels on the left.",
+      "Display estimate and 95% confidence interval as point and horizontal line.",
+      "Show numeric estimate [95% CI] in a right-side column.",
+      "Show dashed vertical reference line at zero.",
+      "Color estimates by whether direction is favorable for each outcome."
+    ],
+    "delta_hte_panel_requirements": [
+      "Display stratum-specific estimates as bars from zero.",
+      "Annotate between-stratum divergence as ΔHTE.",
+      "Include guardrail that directional subgroup differences represent state-dependent net effects and not intrinsic treatment harm."
+    ],
+    "download_requirements": [
+      "SVG export",
+      "PNG export"
+    ],
+    "tooltip_requirements": [
+      "On hover, display strategy or subgroup label plus estimate and 95% CI."
+    ]
+  },
+  "methods_drawer": {
+    "study_design": [
+      "Target-trial aligned observational emulation",
+      "Explicit time-zero definition",
+      "Temporally anchored covariates",
+      "Predefined intervention strategies and bundle combinations",
+      "Clinically relevant outcomes across mortality and recovery domains",
+      "Causal estimand specification before effect estimation"
+    ],
+    "target_trial_alignment": "Treatment assignment, baseline covariates, and outcome assessment were aligned using target-trial principles to reduce immortal time bias, treatment misclassification, and temporal ambiguity.",
+    "causal_machine_learning_framework": [
+      "Baseline Covariates + Treatment Assignment",
+      "Propensity Model + Outcome Model",
+      "Orthogonalization",
+      "Cross-Fitting",
+      "Causal Forest Estimation",
+      "ATE • CATE • ΔHTE"
+    ],
+    "calibration_and_diagnostics": [
+      "Calibration assessment",
+      "Overlap diagnostics",
+      "Treatment-support evaluation",
+      "Subgroup-specific estimability assessment"
+    ],
+    "why_estimability_matters": "Not every clinically relevant treatment question can be reliably answered from observational data. Treatment-effect estimates were interpreted only within regions supported by adequate overlap and positivity. The atlas explicitly distinguishes between estimable, limited-overlap, and non-estimable comparisons rather than extrapolating unsupported effects.",
+    "methodological_takeaway": "Target-trial principles, causal machine learning, calibration assessment, and estimability diagnostics should be interpreted together when evaluating treatment-effect estimates."
+  },
+  "visual_style": {
+    "palette": {
+      "background": "#f7f9fb",
+      "paper": "#ffffff",
+      "ink": "#102b3d",
+      "muted": "#6a7785",
+      "line": "#dbe4ea",
+      "slate": "#16384c",
+      "teal": "#2b7885",
+      "green_benefit": "#2f7d55",
+      "amber_limited": "#9a6a00",
+      "red_unfavorable": "#9b3f3f",
+      "gray_reference": "#798591"
+    },
+    "typography": "System UI / -apple-system / BlinkMacSystemFont / Segoe UI / Roboto / Arial / sans-serif",
+    "design_principles": [
+      "Minimal, high-whitespace layout",
+      "Large typography",
+      "Few colors",
+      "No overlapping text",
+      "Right-side numeric columns for effect estimates",
+      "Clear interpretive guardrails"
+    ]
+  }
+}
